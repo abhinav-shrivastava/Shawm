@@ -1,20 +1,37 @@
 <% provide(:title, 'Search Results') %>
-<h1>Similar Results</h1>
-
+<h1><%=@search.query %></h1>
 <div class="row">
-  <div class="col-md-8">
-    <% @matching_artists.first(10).each do |artist| %>
-      <div class="row">
-        <div class="col-md-4">
-          <div class="thumbnail">
-          <a href="<%= artist['url']%>" target="_blank">
-            <img src="<%= artist['image'][-2]['#text']%>" class="img-thumbnail">
-            <div class="caption">
-              <%= artist['name'] %>
-            </div>
+  <div class="col-md-8 col-md-offset-2">
+    <div class="row">
+      <div class="col-md-5">
+        <div class="row">
+          <a href="<%= @artist_info['url']%>" target="_blank">
+            <img src="<%= @artist_info.dig('artist', 'image', -3, '#text') %>" class="img-circle">
           </a>
         </div>
       </div>
-    <% end %>
+      <div class="col-md-7">
+        <p> <%= @artist_info['artist']['bio']['summary'] %> </p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+      <% if @matching_artists.any? %>
+        <h3>Matching Artists (<%= @matching_artists.count %>)</h3>
+        <ol class="similar">
+          <% @matching_artists.each do |artist| %>
+            <div class="col-md-3">
+              <div class="thumbnail">
+                <a href="<%= artist['url']%>" target="_blank">
+                  <img src="<%= artist['image'][-3]['#text']%>" class="img-thumbnail">
+                  <div class="caption"><p><%= artist['name'] %></p></div>
+                </a>
+              </div>
+            </div>
+          <% end %>
+        </ol>
+      <% end %>
   </div>
 </div>

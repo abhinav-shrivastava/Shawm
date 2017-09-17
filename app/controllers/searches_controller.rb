@@ -6,12 +6,16 @@ class SearchesController < ApplicationController
   end
 
   def create
-    @search = Search.new(search_params)
+    @search = current_user.searches.build(search_params)
     if @search.save
       @matching_artists = matching_artists @search.query
-      byebug
+      @artist_info = artist_info @search.query
+      if @matching_artists.empty?
+        flash[:danger] = "No resuls found for #{@search.query}, try something else!"
+        redirect_to search_url
+      end
     else
-      flash[:error] = 'Try searching again!'
+      flash[:danger] = 'Try searching again!'
       redirect_to search_url
     end
   end
