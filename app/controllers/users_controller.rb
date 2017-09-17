@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
+    # To do; Show user's recent 10 searches
   end
 
   def new
